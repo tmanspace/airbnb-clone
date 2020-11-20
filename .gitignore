@@ -140,3 +140,4 @@ cython_debug/
 .vscode
 
 my_config.py
+uploads/

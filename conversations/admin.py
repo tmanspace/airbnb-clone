@@ -7,7 +7,7 @@ from . import models
 @admin.register(models.Conversation)
 class ConversationAdmin(admin.ModelAdmin):
 
-    list_display = ("__str__", "count_messages")
+    list_display = ("__str__", "count_messages", "count_participants")
     # pass
 
 
