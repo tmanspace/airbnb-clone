@@ -6,14 +6,16 @@ from lists.models import List
 from users import models as user_models
 from rooms import models as room_models
 
+TEXT = "lists"
+
 
 class Command(BaseCommand):
 
-    help = "This command adds lists how much you wish"
+    help = f"This command adds {TEXT} how much you wish"
 
     def add_arguments(self, parser):
         parser.add_argument(
-            "--number", default=2, type=int, help="How many lists to create?"
+            "--number", default=2, type=int, help="How many {TEXT}  to create?"
         )
 
     def handle(self, *args, **options):
@@ -29,11 +31,11 @@ class Command(BaseCommand):
                 "user": lambda x: random.choice(users_all),
             },
         )
-        created_lists = seeder.execute()
-        created_clean = flatten(list(created_lists.values()))
-        for pk in created_clean:
+        created = seeder.execute()
+        cleaned = flatten(list(created.values()))
+        for pk in cleaned:
             list_ = List.objects.get(pk=pk)
-            to_add = rooms_all[random.randint(0, 5) : random.randint(6, 20)]
+            to_add = rooms_all[1 : random.randint(6, 20)]
             list_.rooms.add(*to_add)
 
-        self.stdout.write(self.style.SUCCESS(f"{number} lists were created!"))
+        self.stdout.write(self.style.SUCCESS(f"{number} {TEXT} were created!"))
