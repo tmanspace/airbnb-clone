@@ -1,0 +1,20 @@
+{% extends "base.html" %} 
+
+{% block title %} All rooms {% endblock title %}
+
+{%block content %} 
+{% for room in page %}
+<h1>{{room.name}}</h1>
+{% endfor %} 
+
+<h3>
+    {% if page.has_previous %}
+        <a href="/?page={{page.previous_page_number}}">Previous</a>
+    {% endif %}
+    {{page.number}} of {{page.paginator.num_pages}}
+    {% if page.has_next %}
+        <a href="/?page={{page.next_page_number}}">Next</a>
+    {% endif %}
+</h3>
+
+{% endblock content %}
