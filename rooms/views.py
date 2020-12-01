@@ -1,21 +1,42 @@
-from django.shortcuts import render, redirect
-from django.core.paginator import Paginator, EmptyPage
+from django.utils import timezone
+from django.views.generic import ListView
+from django.shortcuts import render
 from . import models
 
 # Create your views here.
 
 
-def all_rooms(req):
-    page = req.GET.get("page", 1)
-    room_list = models.Room.objects.all()
-    paginator = Paginator(room_list, 10, orphans=5)
+class HomeView(ListView):
 
-    try:
-        rooms = paginator.page(int(page))
-        return render(
-            req,
-            template_name="rooms/home.html",
-            context={"page": rooms},
-        )
-    except EmptyPage:
-        return redirect("/")
+    model = models.Room
+    ordering = "name"
+    paginate_by = 10
+    context_object_name = "rooms"
+    template_name = "room"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["now"] = timezone.now()
+        return context
+
+
+def room_detail(request, pk):
+    return render(request, "rooms/detail.html")
+
+
+""" PAGINATOR """
+
+# def all_rooms(req):
+#     page = req.GET.get("page", 1)
+#     room_list = models.Room.objects.all()
+#     paginator = Paginator(room_list, 10, orphans=5)
+
+#     try:
+#         rooms = paginator.page(int(page))
+#         return render(
+#             req,
+#             template_name="rooms/home.html",
+#             context={"page": rooms},
+#         )
+#     except EmptyPage:
+#         return redirect("/")
