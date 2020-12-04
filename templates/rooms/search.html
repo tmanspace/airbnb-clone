@@ -4,10 +4,18 @@
     Search
 {% endblock title %}
 
+{% block search-bar %}
+{% endblock search-bar %}
+
 {% block content %}
 
     <h2>Search!</h2>
 
-    <h4>Searching by {{city}}</h4>
+    <form method="get" action="{% url "rooms:search" %}">
+        <input type="text" value="{{city}}" name="city" id="" placeholder="Search">
+    </form>
+
+
+
 
 {% endblock content %}
