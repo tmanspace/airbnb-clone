@@ -9,6 +9,8 @@ from . import models
 
 class HomeView(ListView):
 
+    """ Home View Model """
+
     model = models.Room
     ordering = "name"
     paginate_by = 10
@@ -27,6 +29,12 @@ def room_detail(request, pk):
         return render(request, "rooms/detail.html", {"room": room})
     except models.Room.DoesNotExist:
         raise Http404()
+
+
+def search(req):
+    city = req.GET.get("city").capitalize()
+    print(city)
+    return render(req, "rooms/search.html", {"city": city})
 
 
 """ PAGINATOR """
