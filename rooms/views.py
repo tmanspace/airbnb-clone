@@ -2,6 +2,7 @@ from django.utils import timezone
 from django.http import Http404
 from django.views.generic import ListView
 from django.shortcuts import render
+from django_countries import countries
 from . import models
 
 # Create your views here.
@@ -32,9 +33,20 @@ def room_detail(request, pk):
 
 
 def search(req):
-    city = req.GET.get("city").capitalize()
-    print(city)
-    return render(req, "rooms/search.html", {"city": city})
+    city = req.GET.get("city", "anywhere").capitalize()
+    room_types = models.RoomType.objects.all()
+    country = req.GET.get("country", "KR")
+    room_type = int(req.GET.get("room_type", 0))
+
+    form = {"city": city, "s_country": country, "s_room_type": room_type}
+
+    choices = {"countries": countries, "room_types": room_types}
+
+    return render(
+        req,
+        "rooms/search.html",
+        {**form, **choices},
+    )
 
 
 """ PAGINATOR """
