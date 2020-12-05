@@ -34,13 +34,50 @@ def room_detail(request, pk):
 
 def search(req):
     city = req.GET.get("city", "anywhere").capitalize()
-    room_types = models.RoomType.objects.all()
     country = req.GET.get("country", "KR")
     room_type = int(req.GET.get("room_type", 0))
+    price = int(req.GET.get("price", 0))
+    guests = int(req.GET.get("guests", 0))
+    rooms = int(req.GET.get("rooms", 0))
+    baths = int(req.GET.get("baths", 0))
+    beds = int(req.GET.get("beds", 0))
+    bedrooms = int(req.GET.get("bedrooms", 0))
+    s_amenities = req.GET.getlist("amenities", [])
+    s_facilities = req.GET.getlist("facilities", [])
+    superhost = req.GET.get("superhost", False)
+    instant = req.GET.get("instant", False)
+    print(s_amenities, s_facilities)
 
-    form = {"city": city, "s_country": country, "s_room_type": room_type}
+    form = {
+        "city": city,
+        "s_country": country,
+        "s_room_type": room_type,
+        "price": price,
+        "guests": guests,
+        "rooms": rooms,
+        "baths": baths,
+        "beds": beds,
+        "bedrooms": bedrooms,
+        "s_amenities": s_amenities,
+        "s_facilities": s_facilities,
+        "instant": instant,
+        "superhost": superhost,
+    }
 
-    choices = {"countries": countries, "room_types": room_types}
+    room_types = models.RoomType.objects.all()
+    amenities = models.Amenity.objects.all()
+    facilities = models.Facility.objects.all()
+    # house_rules = models.HouseRule.objects.all()
+
+    choices = {
+        "countries": countries,
+        "room_types": room_types,
+        "amenities": amenities,
+        "facilities": facilities,
+        # "house_rules": house_rules,
+    }
+
+    # rooms = models.Room.objects.filter(**filter_args)
 
     return render(
         req,
