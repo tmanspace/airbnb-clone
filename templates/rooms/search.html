@@ -20,6 +20,7 @@
         <div>
             <label for="country">Country</label>
             <select name="country" id="country">
+                <option value="None" {% if "None" == s_country %}selected{% endif %}>Не выбрано</option>
                 {% for country in countries %}
                     <option value="{{country.code}}" {% if country.code == s_country %}selected{% endif %}>{{country.name}}</option>
                 {% endfor %}
@@ -35,7 +36,7 @@
             </select>
         </div>
         <div>
-            <label for="price">Price</label>
+            <label for="price">Price (less than or equals)</label>
             <input value="{{price}}" type="number" name="price" id="price" placeholder="Price">
         </div>
         <div>
@@ -92,7 +93,13 @@
         <button>Search</button>
     </form>
 
+    <h2>Results</h2>
 
+    <div class="rooms_container">
+        {% for room in rooms_get %}
+            <div class="room">{{room.name}} || {{room.price}}</div>
+        {% endfor %}
+    </div>
 
 
 {% endblock content %}

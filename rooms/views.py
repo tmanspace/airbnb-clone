@@ -34,7 +34,7 @@ def room_detail(request, pk):
 
 def search(req):
     city = req.GET.get("city", "anywhere").capitalize()
-    country = req.GET.get("country", "KR")
+    country = req.GET.get("country", "None")
     room_type = int(req.GET.get("room_type", 0))
     price = int(req.GET.get("price", 0))
     guests = int(req.GET.get("guests", 0))
@@ -77,12 +77,25 @@ def search(req):
         # "house_rules": house_rules,
     }
 
-    # rooms = models.Room.objects.filter(**filter_args)
+    filter_args = {}
+
+    if city != "Anywhere":
+        filter_args["city__startswith"] = city
+
+    if country != "None":
+        filter_args["country"] = country
+
+    if room_type != 0:
+        filter_args["room_type__pk"] = room_type
+
+    rooms_get = models.Room.objects.filter(**filter_args)
+
+    print(rooms_get)
 
     return render(
         req,
         "rooms/search.html",
-        {**form, **choices},
+        {**form, **choices, "rooms_get": rooms_get},
     )
 
 
