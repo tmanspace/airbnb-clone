@@ -46,7 +46,6 @@ def search(req):
     s_facilities = req.GET.getlist("facilities", [])
     superhost = req.GET.get("superhost", False)
     instant = req.GET.get("instant", False)
-    print(s_amenities, s_facilities)
 
     form = {
         "city": city,
@@ -87,6 +86,35 @@ def search(req):
 
     if room_type != 0:
         filter_args["room_type__pk"] = room_type
+
+    if price != 0:
+        filter_args["price__lte"] = price
+
+    if guests != 0:
+        filter_args["guests__gte"] = guests
+
+    if bedrooms != 0:
+        filter_args["bedrooms__gte"] = bedrooms
+
+    if beds != 0:
+        filter_args["beds__gte"] = beds
+
+    if baths != 0:
+        filter_args["baths__gte"] = baths
+
+    if instant:
+        filter_args["instant_book"] = True
+
+    if superhost:
+        filter_args["host__superhost"] = True
+
+    if len(s_amenities) > 0:
+        for s_a in s_amenities:
+            filter_args["amenities__pk"] = s_a
+
+    if len(s_facilities) > 0:
+        for s_f in s_facilities:
+            filter_args["facilities__pk"] = s_f
 
     rooms_get = models.Room.objects.filter(**filter_args)
 
