@@ -21,7 +21,8 @@ class CustomUserAdmin(UserAdmin):
         "superhost",
         "is_superuser",
         "email_confirmed",
-        "email_secret"
+        "email_secret",
+        "login_method"
     )
 
     fieldsets = UserAdmin.fieldsets + (

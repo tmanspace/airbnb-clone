@@ -1,3 +1,5 @@
+import os
+import requests
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views import View
@@ -9,12 +11,11 @@ from . import forms, models
 
 
 class LoginView(View):
-
     def get(self, req):
-        if (req.user.username != ""):
+        if req.user.username != "":
             return redirect(reverse("core:home"))
         form = forms.LoginForm(initial={"email": "serazutdinov.tim@gmail.com"})
-        return render(req, "users/login.html", context={"form" : form})
+        return render(req, "users/login.html", context={"form": form})
 
     def post(self, req):
         form = forms.LoginForm(req.POST)
@@ -43,7 +44,7 @@ class SignUpView(FormView):
         "last_name": "Ser",
         "email": "hello@gmail.com",
         "password": "nice12Fg#",
-        "password2": "nice12Fg#"
+        "password2": "nice12Fg#",
     }
 
     def form_valid(self, form):
@@ -70,4 +71,71 @@ def complete_verification(request, key):
 
 
 def github_login(request):
+    client_id = os.environ.get("GH_ID")
+    redirect_uri = "http://localhost:8000/users/login/github/callback"
+    return redirect(
+        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope=read:user"
+    )
+
+
+class GithubException(Exception):
     pass
+
+
+def github_callback(request):
+    try:
+        code = request.GET.get("code", None)
+        if code is not None:
+            client_id = os.environ.get("GH_ID")
+            client_secret = os.environ.get("GH_SECRET")
+            request_gh = requests.post(
+                f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
+                headers={"Accept": "application/json"},
+            )
+            result_json = request_gh.json()
+            error = result_json.get("error", None)  # If error from GH
+            if error is not None:
+                raise GithubException()
+            else:
+                access_token = result_json.get("access_token")
+                api_req = requests.get(
+                    "https://api.github.com/user",
+                    headers={
+                        "Authorization": f"token {access_token}",
+                        "Accept": "application/json",
+                    },
+                )
+                profile = api_req.json()
+                username = profile.get("login", None)
+                if username is not None:
+                    name = profile.get("name", None)
+                    email = profile.get("email", None)
+                    bio = profile.get("bio", "")
+                    if name is None or email is None:
+                        print("name or email are none")
+                        raise GithubException
+                    try:
+                        user = models.User.objects.get(email=email)
+                        if user.login_method == models.User.LOGIN_GH:
+                            # Trying log in through GH
+                            login(request, user)
+                        else:
+                            raise GithubException()
+                    except models.User.DoesNotExist:
+                        new_user = models.User.objects.create(
+                            username=email,
+                            bio=bio,
+                            email=email,
+                            first_name=name,
+                            login_method=models.User.LOGIN_GH,
+                        )
+                        new_user.set_unusable_password()
+                        new_user.save()
+                        login(request, new_user)
+                    return redirect(reverse("core:home"))
+                else:
+                    raise GithubException()
+        else:
+            raise GithubException()
+    except GithubException:
+        return redirect(reverse("users:login"))
