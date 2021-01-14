@@ -6,6 +6,7 @@ from django.views import View
 from django.views.generic import FormView
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models
+from django.template import RequestContext
 
 # Create your views here.
 
@@ -25,6 +26,8 @@ class LoginView(View):
             user = authenticate(req, username=email, password=password)
             if user is not None:
                 login(req, user)
+                request_context = RequestContext(self.request)
+                request_context.push({"custom_user" : user})
                 return redirect(reverse("core:home"))
         return render(req, "users/login.html", {"form": form})
 
@@ -50,11 +53,13 @@ class SignUpView(FormView):
     def form_valid(self, form):
         form.save()
         email = form.cleaned_data.get("email")
-        password = form.cleaned_data.get("password")
-        user = authenticate(self.request, username=email, password=password)
+        password1 = form.cleaned_data.get("password1")
+        user = authenticate(self.request, username=email, password=password1)
         if user is not None:
             login(self.request, user)
         user.verify_email()
+        request_context = RequestContext(self.request)
+        request_context.push({"user_info": {"name" : user.first_name}})
         return super().form_valid(form)
 
 

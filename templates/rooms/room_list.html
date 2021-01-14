@@ -4,6 +4,13 @@
 
 {%block content %} 
 <p>{{now}}</p>
+
+{% if user.is_authenticated %}
+<h2>{{ custom_user }} </h2>
+{% else %}
+<h3>Hey, register first!</h3>
+{% endif %}
+
 {% for room in rooms %}
 <h3>
     <a href="{% url "rooms:detail" room.pk %}">{{room.name}}</a>
