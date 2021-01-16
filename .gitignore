@@ -141,3 +141,4 @@ cython_debug/
 
 my_config.py
 uploads/
+node_modules
