@@ -7,40 +7,24 @@
     <link rel="icon" type="image/png" href="{% static "favicon.png" %}" />
     <link rel="apple-touch-icon" href="{% static "favicon.png" %}"/>
     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <title>{% block title %}{% endblock %} | Nbnb</title>
-    <style>
-        /* * {
-            font-family: 'JetBrains Mono', monospace;
-        } */
-
-        /* input:checked + label {
-            color: blue;
-        }
-
-        form ul li {
-            list-style: none;
-        }
-
-        form div {
-            display: flex;
-            width: 400px;
-            flex-direction: column;
-        } */
-
-    </style>
 </head>
-<body>
-    <header>
-        {% include "partials/nav.html" %}  
-        {% block search-bar %}
-            <form method="get" action="{% url "rooms:search" %}">
-                <input type="text" name="city" id="" placeholder="Search">
-            </form>
-        {% endblock search-bar %}
+<body class="text-gray-800">
+    <header class="container max-w-full border-b border-gray-300 flex items-center justify-between px-6 h-20">
+        <div class="flex items-center">
+            <a class="mr-6" href="{% url "core:home" %}"><img class="w-8" src="{% static 'airbnb_logo.svg' %}" alt="logo" ></a>
+            {% block search-bar %}
+                <form method="get" action="{% url "rooms:search" %}">
+                    <input class="border px-2 py-1 rounded hover:shadow-md transition-shadow" type="text" name="city" id="" placeholder="Search">
+                </form>
+            {% endblock search-bar %}
+        </div>    
+        {% include "partials/nav.html" %}    
     </header>  
     {% block content %} {% endblock %}
     {% include "partials/footer.html" %}
-    
+     
 </body>
 </html>
