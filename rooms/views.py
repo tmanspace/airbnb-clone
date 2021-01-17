@@ -16,7 +16,7 @@ class HomeView(ListView):
 
     model = models.Room
     ordering = "name"
-    paginate_by = 10
+    paginate_by = 12
     context_object_name = "rooms"
     template_name = "room"
 
