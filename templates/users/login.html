@@ -10,16 +10,8 @@
 {% block content %}
 <div class="container mx-auto mt-32 mb-20 flex-col flex-1 flex items-center py-6 px-4 md:w-1/2 lg:w-4/12 w-full xl:w-3/12  border border-gray-300 rounded-lg">
     {% include 'partials/social_login.html' %}  
-    
-    <form action="{% url "users:login" %}" method="post" class="w-full">
-        {% csrf_token %}
-        
-        {% for field in form %}
-            {% include 'partials/form_input.html' with field=field %}
-        {% endfor %}
-        <button class="btn btn-red">Sign in </button>
-    </form>
 
+    {% include 'mixins/auth/auth_form.html' with form=form cta="Sign in" %}
     <div class="flex justify-between mt-2 items-center w-full">
         <span>Don't have an account?</span>
         <a href="{% url 'users:signup' %}" class="py-1 px-6 hover:text-white hover:bg-red-500 transition-colors border border-red-500 text-red-400 rounded">Sign up</a>

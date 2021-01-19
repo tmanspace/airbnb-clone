@@ -18,7 +18,7 @@
 
     <div class="container flex flex-wrap mb-4">
         {% for room in rooms %}
-            {% include 'partials/room_card.html' with room=room %}
+            {% include 'mixins/room_card.html' with room=room %}
         {% endfor %} 
     </div>
 
