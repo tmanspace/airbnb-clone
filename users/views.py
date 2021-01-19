@@ -47,7 +47,7 @@ class SignUpView(FormView):
         "last_name": "Ser",
         "email": "hello@gmail.com",
         "password": "nice12Fg#",
-        "password2": "nice12Fg#",
+        "password1": "nice12Fg#",
     }
 
     def form_valid(self, form):
@@ -57,9 +57,9 @@ class SignUpView(FormView):
         user = authenticate(self.request, username=email, password=password1)
         if user is not None:
             login(self.request, user)
-        user.verify_email()
+        # user.verify_email()
         request_context = RequestContext(self.request)
-        request_context.push({"user_info": {"name" : user.first_name}})
+        request_context.push({"my_user": user})
         return super().form_valid(form)
 
 
