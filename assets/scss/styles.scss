@@ -25,3 +25,33 @@ input {
 .has_error input {
     @apply bg-red-50 border-red-600;
 }
+
+@keyframes messageFadeIn {
+    0% {
+        opacity: 0;
+        display: flex;
+    }
+    5% {
+        opacity: 1;
+    }
+    95% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        display: none;
+        visibility: hidden;
+    }
+}
+
+.messages {
+    animation: messageFadeIn 5s ease-in-out forwards;
+    &.error {
+        @apply bg-red-100 text-red-600;
+    }
+    & .success {
+        @apply bg-green-100 text-green-700;
+    }
+
+}

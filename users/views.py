@@ -6,6 +6,7 @@ from django.views import View
 from django.views.generic import FormView
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models
+from django.contrib import messages
 from django.template import RequestContext
 
 # Create your views here.
@@ -26,8 +27,7 @@ class LoginView(View):
             user = authenticate(req, username=email, password=password)
             if user is not None:
                 login(req, user)
-                request_context = RequestContext(self.request)
-                request_context.push({"custom_user" : user})
+                messages.success(req, f"Welcome back, {user.first_name}")
                 return redirect(reverse("core:home"))
         return render(req, "users/login.html", {"form": form})
 

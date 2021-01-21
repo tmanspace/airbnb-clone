@@ -5,17 +5,8 @@
 {%block content %} 
 
 <div class="container mx-auto">
-
-    <div class="bg-gray-600 h-vh50 shadow-sm hover:shadow-lg transition-shadow rounded-xl container mx-auto mt-32 mb-16 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');">
-
+    <div class="bg-gray-600 h-vh50 shadow-sm hover:shadow-lg transition-shadow rounded-xl container mx-auto mt-32 mb-16 bg-cover bg-center" style="background-image: url('https://source.unsplash.com/random/4800x1200');">
     </div>
-
-    {% if user.is_authenticated %}
-    <h2>{{ user.first_name }} </h2>
-    {% else %}
-    <h3>Hey, register first!</h3>
-    {% endif %}
-
     <div class="container flex flex-wrap mb-4">
         {% for room in rooms %}
             {% include 'mixins/room_card.html' with room=room %}
