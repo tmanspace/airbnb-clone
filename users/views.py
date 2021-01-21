@@ -3,7 +3,7 @@ import requests
 from django.shortcuts import render, redirect, reverse
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import FormView
+from django.views.generic import FormView, DetailView
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models
 from django.contrib import messages
@@ -144,3 +144,9 @@ def github_callback(request):
             raise GithubException()
     except GithubException:
         return redirect(reverse("users:login"))
+
+
+class ProfileView(DetailView):
+
+    model = models.User
+    context_object_name = "user_obj"
