@@ -20,6 +20,9 @@ class CustomUserAdmin(UserAdmin):
         "currency",
         "superhost",
         "is_superuser",
+        "email_confirmed",
+        "email_secret",
+        "login_method"
     )
 
     fieldsets = UserAdmin.fieldsets + (

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Sign Up
+{% endblock title %}
+
+{% block search-bar %}
+{% endblock search-bar %}
+
+{% block content %}
+    <div class="container mx-auto mt-32 mb-20 flex-col flex-1 flex items-center py-6 px-4 md:w-1/2 lg:w-4/12 w-full xl:w-3/12  border border-gray-300 rounded-lg">
+        {% include 'partials/social_login.html' %}
+
+        {% include 'mixins/auth/auth_form.html' with form=form cta="Sign up" %}
+
+        <div class="flex justify-between mt-2 items-center w-full">
+            <span>Have an account?</span>
+            <a href="{% url 'users:login' %}" class="py-1 px-6 hover:text-white hover:bg-red-500 transition-colors border border-red-500 text-red-400 rounded">Sign in</a>
+        </div>  
+    </div>
+    
+{% endblock content %}
